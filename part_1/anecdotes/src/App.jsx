@@ -32,7 +32,6 @@ const App = () => {
       }
     }
 
-    console.log(votes[index])
     return index;
   }
   return (
