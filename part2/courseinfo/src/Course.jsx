@@ -15,7 +15,6 @@ const Part = ({ part }) => {
   )
 }
 
-
 const Content = ({ parts }) => {
   return (
     <>
