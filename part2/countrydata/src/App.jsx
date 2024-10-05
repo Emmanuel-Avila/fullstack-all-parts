@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
-const CountryDetails = ({country}) => {
-  console.log(country)
+const CountryDetails = ({country, show = true}) => {
+  if(!show){
+    return null
+  }
   return(
     <>
       <h1>{country.name.official}</h1>
@@ -20,10 +22,21 @@ const CountryDetails = ({country}) => {
 }
 
 const CountriesList = ({countries}) => {
+  const [show, setShow] = useState(false);
+
   return(
     <>
       {countries.length > 10 ? "Too many matches, specify another filter" :
-        countries.map( c => <div key={c.name.official}>{c.name.official}</div>)
+        countries.map( c => {
+          return (
+            <>
+              <div key={c.name.official}>{c.name.official}
+                <button type="button" onClick={() => setShow(!show)}>show</button>
+              </div>
+              <CountryDetails country={c} show={show} />
+            </>
+          )
+        })
       }
     </>
   )
@@ -32,7 +45,7 @@ const CountriesList = ({countries}) => {
 const App = () => {
   const [value, setValue] = useState('')
   const [countries, setCountries] = useState([])
-  const [searchedCountry, setSearchedCountry] = useState([]);
+  
 
   useEffect(() => {
     axios.get('https://studies.cs.helsinki.fi/restcountries/api/all')
@@ -58,11 +71,10 @@ const App = () => {
   const handleChange = (event) => {
     setValue(event.target.value)
 
-  } 
+  }
   
   const searchedCountries = countries.filter(c => c.name.official.toLowerCase().includes(value.toLowerCase()));
 
-  // console.log(searchedCountries)
   return (
     <div>
       <div>
