@@ -61,14 +61,20 @@ const App = () => {
         .create({name: newName, number: newPhone})
         .then(data => {
           setPersons( persons.concat(data))
+          setSuccessMessage(`Added ${newName}`)
+          setTimeout(()=>{
+            setSuccessMessage(null);
+          }, 3000)
+          setNewName('')
+          setNewPhone('')
         })
-        .catch(err => alert(err));
-      setSuccessMessage(`Added ${newName}`)
-      setTimeout(()=>{
-        setSuccessMessage(null);
-      }, 3000)
-      setNewName('')
-      setNewPhone('')
+        .catch(err => {
+          console.log(err)
+          setErrorMessage(err.response.data.error)
+          setTimeout(() => {
+            setErrorMessage(null);
+          },3000)
+        });
       return
     }
 
@@ -80,11 +86,17 @@ const App = () => {
         })
         .catch(err => {
           console.log(err)
-          setPersons(persons.filter(p => p.name !== duplicatePerson.name));
-          setErrorMessage(`Information about ${duplicatePerson.name} has already been removed from server`);
-          setTimeout(() => {
-            setErrorMessage(null);
-          },3000)
+          if(err.status !== 400){
+            setPersons(persons.filter(p => p.name !== duplicatePerson.name));
+            setErrorMessage(`Information about ${duplicatePerson.name} has already been removed from server`);
+            setTimeout(() => {
+              setErrorMessage(null);
+            },3000)
+          }
+          setErrorMessage(err.response.data.error);
+            setTimeout(() => {
+              setErrorMessage(null);
+            },3000)
         })
     }
   }

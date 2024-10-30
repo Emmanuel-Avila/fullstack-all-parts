@@ -1,0 +1,12 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+
+{
+  "title" : "Dota 2",
+  "author": "GGino",
+  "url": "localhost:3000",
+  "likes": 3
+}
+
+###
+GET http://localhost:3001/api/blogs
