@@ -3,10 +3,13 @@ Content-Type: application/json
 
 {
   "title" : "Dota 2",
-  "author": "GGino",
-  "url": "localhost:3000",
-  "likes": 3
+  "author": "Hadrian",
+  "url": "http://localhost:3000",
+  "likes": 5
 }
 
 ###
 GET http://localhost:3001/api/blogs
+
+###
+DELETE http://localhost:3001/api/blogs/6722c27995839f7c70c1881d
