@@ -34,7 +34,7 @@ test('blogs return with an id property insteaf of _id', async () => {
   assert(keys.includes('id'))
 })
 
-test.only('a valid blog can be added', async () => {
+test('a valid blog can be added', async () => {
   const newBlog = {
     title: 'Hello world!',
     author: "Hadrian",
@@ -55,6 +55,23 @@ test.only('a valid blog can be added', async () => {
   assert.strictEqual(response.body.length, initialBlogs.length + 1);
 
   assert(contents.includes('Hello world!'));
+})
+
+test.only('default likes value is 0', async () => {
+  const newBlog = {
+    title: 'Hello world!',
+    author: "Hadrian",
+    link: 'http://localhost:8080',
+  }
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+    .expect('Content-Type', /application\/json/)
+
+  const response = await api.get('/api/blogs');
+
+  assert.strictEqual(response.body[2].likes, 0);
 })
 
 
