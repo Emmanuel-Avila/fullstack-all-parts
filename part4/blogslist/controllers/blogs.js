@@ -15,6 +15,9 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
+  if (request.body.title === undefined || request.body.url === undefined) {
+    return response.status(400).json({ error: 'Missing properties' })
+  }
   const blog = new Blog(request.body);
   try {
     const res = await blog.save();

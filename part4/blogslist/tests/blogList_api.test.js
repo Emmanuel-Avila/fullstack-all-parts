@@ -57,7 +57,7 @@ test('a valid blog can be added', async () => {
   assert(contents.includes('Hello world!'));
 })
 
-test.only('default likes value is 0', async () => {
+test('default likes value is 0', async () => {
   const newBlog = {
     title: 'Hello world!',
     author: "Hadrian",
@@ -74,6 +74,20 @@ test.only('default likes value is 0', async () => {
   assert.strictEqual(response.body[2].likes, 0);
 })
 
+test.only('throws error if title or url is missing', async () => {
+  const newBlog = {
+    author: "Hadrian",
+    link: 'http://localhost:8080',
+    likes: 5
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+
+
+})
 
 after(async () => {
   await mongoose.connection.close();
