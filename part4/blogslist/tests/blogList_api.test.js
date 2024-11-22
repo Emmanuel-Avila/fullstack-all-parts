@@ -87,7 +87,7 @@ test('throws error if title or url is missing', async () => {
     .expect(400)
 })
 
-test.only('deletes a blog by id', async () => {
+test('deletes a blog by id', async () => {
   const responseBeforeDeletion = await api.get('/api/blogs');
 
   const blogIdToDelete = responseBeforeDeletion.body[0].id;
@@ -102,6 +102,25 @@ test.only('deletes a blog by id', async () => {
   assert.strictEqual(contents.length, initialBlogs.length - 1);
 
   assert(!contents.includes(blogIdToDelete));
+})
+
+test.only('update a blog providing id', async () => {
+  const blog = {
+    likes: 35
+  }
+  const responseBeforeUpdate = await api.get('/api/blogs');
+
+  const blogIdToUpdate = responseBeforeUpdate.body[0].id;
+  await api
+    .put(`/api/blogs/${blogIdToUpdate}`)
+    .send(blog)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+  const responseAfterUpdate = await api.get('/api/blogs');
+  const updatedBlog = responseAfterUpdate.body[0]
+
+  assert.strictEqual(updatedBlog.likes, 35)
 })
 
 after(async () => {

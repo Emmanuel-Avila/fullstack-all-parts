@@ -13,3 +13,13 @@ GET http://localhost:3001/api/blogs
 
 ###
 DELETE http://localhost:3001/api/blogs/6722c27995839f7c70c1881d
+
+###
+PUT http://localhost:3001/api/blogs/673fbb405bae67d14437d711
+Content-Type: application/json
+
+{
+  "likes": 6,
+  "author": "Peter la Anguila",
+  "title": "Libro Peter Senge"
+}
