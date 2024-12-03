@@ -104,7 +104,7 @@ test('deletes a blog by id', async () => {
   assert(!contents.includes(blogIdToDelete));
 })
 
-test.only('update a blog providing id', async () => {
+test('update a blog providing id', async () => {
   const blog = {
     likes: 35
   }
