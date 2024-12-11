@@ -2,33 +2,33 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title" : "Dota 2",
+  "title" : "New Blogss Populate",
   "author": "Hadrian",
   "url": "http://localhost:3000",
-  "likes": 5
+  "likes": 10
 }
 
-###
+###GET ALL BLOGS
 GET http://localhost:3001/api/blogs
 
-###
+### GET ALL USERS
 GET http://localhost:3001/api/users
 
-###
+###CREATE NEW USER
 POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
   "username": "Pieringui",
   "password": "hola",
-  "name": "string"
+  "name": "Piero"
 }
 
 
-###
-DELETE http://localhost:3001/api/blogs/6722c27995839f7c70c1881d
+###DELETE A BLOG
+DELETE http://localhost:3001/api/blogs/6758d57acf93b835e52c7da6
 
-###
+### UPDATE A BLOG
 PUT http://localhost:3001/api/blogs/673fbb405bae67d14437d711
 Content-Type: application/json
 

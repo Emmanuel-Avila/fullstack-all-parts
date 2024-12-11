@@ -1,11 +1,12 @@
 const blogsRouter = require('express').Router();
+const User = require('../models/User.js')
 const Blog = require('../models/Blog.js')
 const logger = require('../utils/logs.js')
 
 blogsRouter.get('/', async (request, response) => {
 
   try {
-    const blogs = await Blog.find({});
+    const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 });
     response.status(200).json(blogs);
 
   } catch (error) {
@@ -15,12 +16,15 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
+  const user = await User.findOne({});
   if (request.body.title === undefined || request.body.url === undefined) {
     return response.status(400).json({ error: 'Missing properties' })
   }
-  const blog = new Blog(request.body);
+  const blog = new Blog({ ...request.body, user: user.id });
   try {
     const res = await blog.save();
+    user.notes = user.notes.concat(blog._id);
+    await user.save();
     response.status(201).json(res);
 
   } catch (error) {
