@@ -1,16 +1,17 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpZXJpbmd1aSIsImlkIjoiNjc0ZTVhNDgwOGY0NmVjNTY4ZGViNzg1IiwiaWF0IjoxNzMzODg0MzY5LCJleHAiOjE3MzM4ODc5Njl9.ujd-VlbIcflzA4bhgjiuz-KN5k9n-bMpL4QZUaBz01s
 
 {
-  "title" : "New Blogss Populate",
-  "author": "Hadrian",
+  "title" : "Blog to try JWT token validation",
+  "author": "Emmanuel",
   "url": "http://localhost:3000",
-  "likes": 10
+  "likes": 120
 }
 
 ###GET ALL BLOGS
 GET http://localhost:3001/api/blogs
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpZXJpbmd1aSIsImlkIjoiNjc0ZTVhNDgwOGY0NmVjNTY4ZGViNzg1IiwiaWF0IjoxNzMzODg0MzY5LCJleHAiOjE3MzM4ODc5Njl9.ujd-VlbIcflzA4bhgjiuz-KN5k9n-bMpL4QZUaBz01s
 ### GET ALL USERS
 GET http://localhost:3001/api/users
 

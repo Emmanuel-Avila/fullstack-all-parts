@@ -2,6 +2,7 @@ const blogsRouter = require('express').Router();
 const User = require('../models/User.js')
 const Blog = require('../models/Blog.js')
 const logger = require('../utils/logs.js')
+const jwt = require('jsonwebtoken')
 
 blogsRouter.get('/', async (request, response) => {
 
@@ -16,17 +17,28 @@ blogsRouter.get('/', async (request, response) => {
 })
 
 blogsRouter.post('/', async (request, response) => {
-  const user = await User.findOne({});
+
+  console.log("log")
+  const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+  if (!decodedToken) {
+    return response.status(401).json({ error: 'token invalid' });
+  }
+
   if (request.body.title === undefined || request.body.url === undefined) {
     return response.status(400).json({ error: 'Missing properties' })
   }
-  const blog = new Blog({ ...request.body, user: user.id });
+
+
   try {
+    const user = await User.findById(decodedToken.id);
+
+    const blog = new Blog({ ...request.body, user: user.id });
+
     const res = await blog.save();
-    user.notes = user.notes.concat(blog._id);
+    user.blogs = user.blogs.concat(blog._id);
     await user.save();
     response.status(201).json(res);
-
   } catch (error) {
     response.status(500).json({ error: error.message })
   }
