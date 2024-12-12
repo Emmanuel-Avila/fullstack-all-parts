@@ -16,21 +16,18 @@ blogsRouter.get('/', async (request, response) => {
   }
 })
 
-blogsRouter.post('/', async (request, response) => {
-
-  console.log("log")
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-
-  if (!decodedToken) {
-    return response.status(401).json({ error: 'token invalid' });
-  }
-
-  if (request.body.title === undefined || request.body.url === undefined) {
-    return response.status(400).json({ error: 'Missing properties' })
-  }
-
+blogsRouter.post('/', async (request, response, next) => {
 
   try {
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+    if (!decodedToken) {
+      return response.status(401).json({ error: 'token invalid' });
+    }
+
+    if (request.body.title === undefined || request.body.url === undefined) {
+      return response.status(400).json({ error: 'Missing properties' })
+    }
     const user = await User.findById(decodedToken.id);
 
     const blog = new Blog({ ...request.body, user: user.id });
@@ -40,17 +37,30 @@ blogsRouter.post('/', async (request, response) => {
     await user.save();
     response.status(201).json(res);
   } catch (error) {
-    response.status(500).json({ error: error.message })
+    next(error);
   }
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', async (request, response, next) => {
   const { id } = request.params;
+
   try {
-    const blogToDelete = await Blog.findByIdAndDelete(id)
+    const decodedToken = jwt.verify(request.token, process.env.SECRET);
+
+    if (!decodedToken) {
+      return response.status(401).json({ error: 'token invalid' });
+    }
+
+    const blogToDelete = await Blog.findById(id)
+    const user = await User.findById(decodedToken.id);
+
+    if (blogToDelete.user.toString() !== user.id) {
+      return response.status(403).json({ error: 'this user cannot delete this blog' });
+    }
+    await Blog.deleteOne({ _id: blogToDelete.id });
     response.status(200).json(blogToDelete);
   } catch (error) {
-    response.status(400).json({ error: error.message });
+    next(error);
   }
 })
 
@@ -67,6 +77,7 @@ blogsRouter.put('/:id', async (request, response) => {
     const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true })
     response.status(200).json(updatedBlog);
   } catch (error) {
+    logger.error(error)
     response.status(400).json({ error: error.message });
   }
 })
