@@ -6,7 +6,7 @@ const logger = require('./utils/logs');
 const blogsRouter = require('./controllers/blogs');
 const usersRouter = require('./controllers/users');
 const loginRouter = require('./controllers/login');
-const { getJWTToken } = require('./utils/middleware')
+const { getJWTToken, userExtractor } = require('./utils/middleware')
 
 const { MONGODB_URI } = require('./utils/config');
 
@@ -21,10 +21,9 @@ mongoose.connect(MONGODB_URI)
 app.use(cors())
 app.use(express.json())
 
-// app.use(getJWTToken);
 
 app.use('/api/login', loginRouter);
-app.use('/api/blogs', getJWTToken, blogsRouter);
+app.use('/api/blogs', getJWTToken, userExtractor, blogsRouter);
 app.use('/api/users', usersRouter);
 
 

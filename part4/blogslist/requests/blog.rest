@@ -1,17 +1,32 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpZXJpbmd1aSIsImlkIjoiNjc0ZTVhNDgwOGY0NmVjNTY4ZGViNzg1IiwiaWF0IjoxNzM0MDQzMDEyLCJleHAiOjE3MzQwNDY2MTJ9.pK4Oyyo--wc6h-pA7cQp4QlN0oSFIaayrvZr2Cr8YYs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpZXJpbmd1aSIsImlkIjoiNjc0ZTVhNDgwOGY0NmVjNTY4ZGViNzg1IiwiaWF0IjoxNzM0MDUyMzI1LCJleHAiOjE3MzQwNTU5MjV9.F_jWXgF6KfOOY4K5A5RBfequMBK2-GVWg0IQi9FwGY4
 
 {
-  "title" : "Blog to try JWT token validation",
-  "author": "Emmanuel",
+  "title" : "Blog to Delete",
+  "author": "Pieringui Dela",
   "url": "http://localhost:3000",
-  "likes": 120
+  "likes": 20
 }
 
 ###GET ALL BLOGS
 GET http://localhost:3001/api/blogs
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpZXJpbmd1aSIsImlkIjoiNjc0ZTVhNDgwOGY0NmVjNTY4ZGViNzg1IiwiaWF0IjoxNzMzODg0MzY5LCJleHAiOjE3MzM4ODc5Njl9.ujd-VlbIcflzA4bhgjiuz-KN5k9n-bMpL4QZUaBz01s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpZXJpbmd1aSIsImlkIjoiNjc0ZTVhNDgwOGY0NmVjNTY4ZGViNzg1IiwiaWF0IjoxNzM0MDUyMzI1LCJleHAiOjE3MzQwNTU5MjV9.F_jWXgF6KfOOY4K5A5RBfequMBK2-GVWg0IQi9FwGY4
+
+###DELETE A BLOG
+DELETE http://localhost:3001/api/blogs/675b8a4022228ca70e0001a2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpZXJpbmd1aSIsImlkIjoiNjc0ZTVhNDgwOGY0NmVjNTY4ZGViNzg1IiwiaWF0IjoxNzM0MDUyMzI1LCJleHAiOjE3MzQwNTU5MjV9.F_jWXgF6KfOOY4K5A5RBfequMBK2-GVWg0IQi9FwGY4
+
+### UPDATE A BLOG
+PUT http://localhost:3001/api/blogs/673fbb405bae67d14437d711
+Content-Type: application/json
+
+{
+  "likes": 6,
+  "author": "Peter la Anguila",
+  "title": "Libro Peter Senge"
+}
+
 ### GET ALL USERS
 GET http://localhost:3001/api/users
 
@@ -23,21 +38,6 @@ Content-Type: application/json
   "username": "Pieringui",
   "password": "hola",
   "name": "Piero"
-}
-
-
-###DELETE A BLOG 6758fb98ef1fbfa6003e8501
-DELETE http://localhost:3001/api/blogs/6758d6d1cccb6222e1a8ecca
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBpZXJpbmd1aSIsImlkIjoiNjc0ZTVhNDgwOGY0NmVjNTY4ZGViNzg1IiwiaWF0IjoxNzM0MDQzMDEyLCJleHAiOjE3MzQwNDY2MTJ9.pK4Oyyo--wc6h-pA7cQp4QlN0oSFIaayrvZr2Cr8YYs
-
-### UPDATE A BLOG
-PUT http://localhost:3001/api/blogs/673fbb405bae67d14437d711
-Content-Type: application/json
-
-{
-  "likes": 6,
-  "author": "Peter la Anguila",
-  "title": "Libro Peter Senge"
 }
 
 ### LOGIN A USER
