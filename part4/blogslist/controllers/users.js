@@ -15,12 +15,11 @@ usersRouter.get('/', async (request, response, next) => {
 usersRouter.post('/', async (request, response, next) => {
   try {
     const body = request.body;
-
     if (!body.username || !body.password) {
       return response.status(400).json({ error: 'Missing username or password' });
     }
 
-    if (body.username.length !== 3 || body.password.length !== 3) {
+    if (body.username.length <= 3 || body.password.length <= 3) {
       return response.status(400).json({ error: 'Username or password of insufficient length' });
     }
 

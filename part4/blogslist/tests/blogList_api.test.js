@@ -1,4 +1,4 @@
-const { test, after, beforeEach } = require('node:test');
+const { test, after, before, beforeEach } = require('node:test');
 const assert = require('node:assert');
 const mongoose = require('mongoose');
 const supertest = require('supertest');
@@ -21,15 +21,29 @@ beforeEach(async () => {
 
 })
 
+let token;
+before(async () => {
+  const user = {
+    username: "Pieringui",
+    password: "hola"
+  }
+  const response = await api
+    .post('/api/login')
+    .send(user)
+
+  token = response.body.token;
+})
+
 test('blogs are returned as JSON', async () => {
   await api
     .get('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /application\/json/);
 })
 
 test('blogs return with an id property insteaf of _id', async () => {
-  const response = await api.get('/api/blogs')
+  const response = await api.get('/api/blogs').set('Authorization', `Bearer ${token}`)
   const keys = Object.keys(response.body[0])
   assert(keys.includes('id'))
 })
@@ -44,11 +58,12 @@ test('a valid blog can be added', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/blogs');
+  const response = await api.get('/api/blogs').set('Authorization', `Bearer ${token}`);
 
   const contents = response.body.map(blog => blog.title);
 
@@ -65,11 +80,12 @@ test('default likes value is 0', async () => {
   }
   await api
     .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
     .send(newBlog)
     .expect(201)
     .expect('Content-Type', /application\/json/)
 
-  const response = await api.get('/api/blogs');
+  const response = await api.get('/api/blogs').set('Authorization', `Bearer ${token}`);
 
   assert.strictEqual(response.body[2].likes, 0);
 })
@@ -83,6 +99,7 @@ test('throws error if title or url is missing', async () => {
 
   await api
     .post('/api/blogs')
+    .set('Authorization', `Bearer ${token}`)
     .send(newBlog)
     .expect(400)
 })
@@ -93,10 +110,11 @@ test('deletes a blog by id', async () => {
   const blogIdToDelete = responseBeforeDeletion.body[0].id;
   await api
     .delete(`/api/blogs/${blogIdToDelete}`)
+    .set('Authorization', `Bearer ${token}`)
     .expect(200)
     .expect('Content-Type', /application\/json/)
 
-  const responseAfterDeletion = await api.get('/api/blogs')
+  const responseAfterDeletion = await api.get('/api/blogs').set('Authorization', `Bearer ${token}`);
   const contents = responseAfterDeletion.body.map(blog => blog.id);
 
   assert.strictEqual(contents.length, initialBlogs.length - 1);
@@ -108,11 +126,12 @@ test('update a blog providing id', async () => {
   const blog = {
     likes: 35
   }
-  const responseBeforeUpdate = await api.get('/api/blogs');
+  const responseBeforeUpdate = await api.get('/api/blogs').set('Authorization', `Bearer ${token}`);
 
   const blogIdToUpdate = responseBeforeUpdate.body[0].id;
   await api
     .put(`/api/blogs/${blogIdToUpdate}`)
+    .set('Authorization', `Bearer ${token}`)
     .send(blog)
     .expect(200)
     .expect('Content-Type', /application\/json/)
@@ -122,6 +141,7 @@ test('update a blog providing id', async () => {
 
   assert.strictEqual(updatedBlog.likes, 35)
 })
+
 
 after(async () => {
   await mongoose.connection.close();
